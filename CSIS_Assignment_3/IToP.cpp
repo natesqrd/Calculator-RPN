@@ -102,7 +102,12 @@ bool IToP::isOperand(string s)
 	else
 		return false;
 }
-
+void IToP::f(double top)
+{
+	stringstream ss;
+	ss << top;
+	ss >> this->varX;
+}
 /*
 Function: itop Main Algorithm
 Translated and Modified: Nathaniel Tucker
@@ -116,10 +121,21 @@ string IToP::itop(string expression)
 	string tmp = expression + ' ';
 	resize(tmp);
 	vector <string> Tokens = split(tmp);
+	stringstream ss;
 	for (string token : Tokens)
 	{
 		if (isOperand(token))
-			postfix += token + " ";
+		{
+			if (token == "x")
+			{
+				if (varX != "NULL")
+					postfix += varX + " ";
+				else
+					postfix += token + " ";
+			}
+			else
+				postfix += token + " ";
+		}
 		else if (token == "(")
 			stk.push(token);
 		else if (token == ")")

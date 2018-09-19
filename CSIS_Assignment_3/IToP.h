@@ -26,8 +26,10 @@ private:
 	void resize(string &std); // handles excess space in string
 	
 protected:
+	string varX = "NULL";
 	string itop(string MathExpression); // main algorithm, utilizes all other functions to convert infix to postfix
 	vector<string> split(string str); // splits string into tokens to be anlyzed by algorithm
 	bool isOperand(string s); // determines if token is an operand
-	
+public:
+	void f(double);
 };

@@ -18,8 +18,16 @@ using std::string;
 class RPN : public IToP
 {
 private:
+	double dX;
+	double a;
+	double b; 
+	int n;
 	string expression;
 	Stack<double> stk;
+	void deltaX(double a, double b, int n)
+	{
+		this->dX = (b - a) / n;
+	}
 	void add(); //pops two numbers and pushes the added value
 	void sub(); // pops two numbers and pushes the difference value
 	void mult(); // pops two numbers and pushes the product value
@@ -39,4 +47,7 @@ public:
 	double operate(); // takes private string and performs operation defined in private
 	double operate(string); //takes string and performs operation defined in private
 	string convert(); // returns the equation as Reverse Polish Notation (RPN)
+	
+	
+	double DefIntegrate(double high_end, double low_end, int iteration);
 };

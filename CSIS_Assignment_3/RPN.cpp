@@ -86,6 +86,22 @@ double RPN::operate()
 	return stk.pop();
 }
 
+double RPN::DefIntegrate(double high_end, double low_end, int iteration)
+{
+	if (high_end == low_end)
+		return 0;
+	else
+	{
+		double area = 0.0;
+		deltaX(high_end, low_end, iteration);
+		for (int i = 0; i < iteration; i++)
+		{
+			f(low_end + (i + 0.5) * dX);
+			area += this->operate() * dX;
+		}
+		return abs(area);
+	}
+}
 /*
 Function: add, sub, mult, div ...
 Author: Nathaniel
