@@ -85,19 +85,28 @@ double RPN::operate()
 	//one number left, final answer
 	return stk.pop();
 }
-
-double RPN::DefIntegrate(double high_end, double low_end, int iteration)
+void RPN::deltaX(double right, double left, int n)
 {
-	if (high_end == low_end)
+	this->dX = (right - left) / n;
+}
+double RPN::f(double top)
+{
+	stringstream ss;
+	ss << top;
+	ss >> this->varX;
+	return this->operate();
+}
+double RPN::DefIntegrate(double left, double right, int iteration)
+{
+	if (left == right)
 		return 0;
 	else
 	{
 		double area = 0.0;
-		deltaX(high_end, low_end, iteration);
+		deltaX(right, left, iteration);
 		for (int i = 0; i < iteration; i++)
 		{
-			f(low_end + (i + 0.5) * dX);
-			area += this->operate() * dX;
+			area += f(left + (i + 0.5) * dX) * dX;
 		}
 		return abs(area);
 	}

@@ -6,12 +6,14 @@ Assignment: CSIS_ASSIGNMENT_3
 Description: RPN Calculator using Stacks
 */
 #pragma once
+#define _USE_MATH_DEFINES
 #include "IToP.h"
 #include "Stack.h"
 #include <string>
 #include <vector>
 #include <cmath>
 #include <iostream>
+#include <sstream>
 
 using std::string;
 
@@ -19,15 +21,10 @@ class RPN : public IToP
 {
 private:
 	double dX;
-	double a;
-	double b; 
-	int n;
 	string expression;
 	Stack<double> stk;
-	void deltaX(double a, double b, int n)
-	{
-		this->dX = (b - a) / n;
-	}
+	void deltaX(double a, double b, int n);
+	
 	void add(); //pops two numbers and pushes the added value
 	void sub(); // pops two numbers and pushes the difference value
 	void mult(); // pops two numbers and pushes the product value
@@ -47,7 +44,7 @@ public:
 	double operate(); // takes private string and performs operation defined in private
 	double operate(string); //takes string and performs operation defined in private
 	string convert(); // returns the equation as Reverse Polish Notation (RPN)
-	
+	double f(double);
 	
 	double DefIntegrate(double high_end, double low_end, int iteration);
 };

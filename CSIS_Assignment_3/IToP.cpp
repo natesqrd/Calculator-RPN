@@ -102,12 +102,7 @@ bool IToP::isOperand(string s)
 	else
 		return false;
 }
-void IToP::f(double top)
-{
-	stringstream ss;
-	ss << top;
-	ss >> this->varX;
-}
+
 /*
 Function: itop Main Algorithm
 Translated and Modified: Nathaniel Tucker

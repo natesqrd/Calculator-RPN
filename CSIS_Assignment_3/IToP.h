@@ -31,5 +31,5 @@ protected:
 	vector<string> split(string str); // splits string into tokens to be anlyzed by algorithm
 	bool isOperand(string s); // determines if token is an operand
 public:
-	void f(double);
+	
 };
