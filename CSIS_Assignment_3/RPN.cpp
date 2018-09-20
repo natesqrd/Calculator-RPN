@@ -72,7 +72,7 @@ Outputs: operated value
 */
 double RPN::operate()
 {
-	string rpn = itop(expression);
+	string rpn = itop(this->expression);
 	vector<string> tokens = split(rpn);
 	for (string token : tokens)
 	{
@@ -118,14 +118,13 @@ Description: Each function is designed to pop the top two variables
 in the stack and perform a specific operation eqaul to the operand
 there are no inputs or outputs, only functions to operate on the data in the stack
 */
-//{
+// -math operations-{ Maybe make this into an operation tree? see if
+//using a hash table helps. Make each token equal to the precidence and mod to go straight to function??
 void RPN::add()
 {
 	if (stk.size() >= 2)
-	{
-		double d = 0.0, e = 0.0;
-		d = stk.pop(); e = stk.pop();
-		stk.push(e + d);
+	{   //repeating system. make into function?
+		stk.push(stk.pop() + stk.pop());
 	}
 	else
 	{
@@ -137,9 +136,8 @@ void RPN::sub()
 {
 	if (stk.size() >= 2)
 	{
-		double d = 0.0, e = 0.0;
-		d = stk.pop(); e = stk.pop();
-		stk.push(e - d);
+		this->d = stk.pop();
+		stk.push(stk.pop() - d);
 	}
 	else
 	{
@@ -151,9 +149,7 @@ void RPN::mult()
 {
 	if (stk.size() >= 2)
 	{
-		double d = 0.0, e = 0.0;
-		d = stk.pop(); e = stk.pop();
-		stk.push(e * d);
+		stk.push(stk.pop() * stk.pop());
 	}
 	else
 	{
@@ -165,9 +161,9 @@ void RPN::div()
 {
 	if (stk.size() >= 2)
 	{
-		double d = 0.0, e = 0.0;
-		d = stk.pop(); e = stk.pop();
-		stk.push(e / d);
+		//double d = 0.0, e = 0.0;
+		this->d = stk.pop();
+		stk.push(stk.pop() / d);
 	}
 	else
 	{
@@ -180,9 +176,8 @@ void RPN::power()
 
 	if (stk.size() >= 2)
 	{
-		double d = 0.0, e = 0.0;
-		d = stk.pop(); e = stk.pop();
-		stk.push(std::pow(e, d));
+		this->d = stk.pop();
+		stk.push(std::pow(stk.pop(), d));
 	}
 	else
 	{
@@ -194,9 +189,8 @@ void RPN::root()
 {
 	if (stk.size() >= 2)
 	{
-		double d = 0.0, e = 0.0;
-		d = stk.pop(); e = 1 / stk.pop();
-		stk.push(std::pow(d, e));
+		this->d = stk.pop();
+		stk.push(std::pow(d, 1/stk.pop()));
 	}
 	else
 	{
@@ -208,9 +202,8 @@ void RPN::mod()
 {
 	if (stk.size() >= 2)
 	{
-		double d = 0.0, e = 0.0;
-		d = stk.pop(); e = stk.pop();
-		stk.push(std::fmod(e, d));
+		this->d = stk.pop();
+		stk.push(std::fmod(stk.pop(), d));
 	}
 	else
 	{

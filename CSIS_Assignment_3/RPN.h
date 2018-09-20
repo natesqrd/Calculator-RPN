@@ -24,6 +24,7 @@ private:
 	string expression;
 	Stack<double> stk;
 	void deltaX(double a, double b, int n);
+	double d, e;
 	
 	void add(); //pops two numbers and pushes the added value
 	void sub(); // pops two numbers and pushes the difference value
@@ -40,11 +41,13 @@ private:
 public:
 	RPN(); // default constructor sets private string to "0"
 	RPN(string);// working constructor sets private string to string
+	string getExpression() { return this->expression;  }
+	string getX() { return this->varX;  }
 	void changeExpression(string); // changes private string to string
 	double operate(); // takes private string and performs operation defined in private
 	double operate(string); //takes string and performs operation defined in private
 	string convert(); // returns the equation as Reverse Polish Notation (RPN)
 	double f(double);
-	
+	void printEq() { std::cout << this->expression << " = " << this->operate() << " when x = " << this->getX() << std::endl; }
 	double DefIntegrate(double high_end, double low_end, int iteration);
 };
