@@ -25,6 +25,7 @@ private:
 	Stack<double> stk;
 	void deltaX(double a, double b, int n);
 	double d, e;
+	char plane[10][10];
 	
 	void add(); //pops two numbers and pushes the added value
 	void sub(); // pops two numbers and pushes the difference value
@@ -50,4 +51,6 @@ public:
 	double f(double);
 	void printEq() { std::cout << this->expression << " = " << this->operate() << " when x = " << this->getX() << std::endl; }
 	double DefIntegrate(double high_end, double low_end, int iteration);
+	void graph();
+	void populate();
 };

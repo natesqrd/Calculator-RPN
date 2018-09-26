@@ -15,7 +15,7 @@ Description: Creates instance of RPN, sets string to "0"
 */
 RPN::RPN()
 {
-	this->expression = "0";
+	this->changeExpression("0");
 }
 
 /*
@@ -122,15 +122,7 @@ there are no inputs or outputs, only functions to operate on the data in the sta
 //using a hash table helps. Make each token equal to the precidence and mod to go straight to function??
 void RPN::add()
 {
-	if (stk.size() >= 2)
-	{   //repeating system. make into function?
-		stk.push(stk.pop() + stk.pop());
-	}
-	else
-	{
-		cout << "Too many operators" << endl;
-		exit(-1);
-	}
+	stk.size() >= 2 ? stk.push(stk.pop() + stk.pop()) : exit(-1);
 }
 void RPN::sub()
 {
@@ -147,21 +139,12 @@ void RPN::sub()
 }
 void RPN::mult()
 {
-	if (stk.size() >= 2)
-	{
-		stk.push(stk.pop() * stk.pop());
-	}
-	else
-	{
-		cout << "Too many operators" << endl;
-		exit(-1);
-	}
+	stk.size() >= 2 ? stk.push(stk.pop() * stk.pop()) : exit(-1);
 }
 void RPN::div()
 {
 	if (stk.size() >= 2)
 	{
-		//double d = 0.0, e = 0.0;
 		this->d = stk.pop();
 		stk.push(stk.pop() / d);
 	}
@@ -213,36 +196,15 @@ void RPN::mod()
 }
 void RPN::sine()
 {
-	if (stk.size() >= 1)
-	{
-		stk.push(std::sin(stk.pop()));
-	}
-	else
-	{
-		cout << "Too many operators" << endl;
-	}
+	stk.size() >= 1 ? stk.push(std::sin(stk.pop())) : exit(-1);
 }
 void RPN::cosine()
 {
-	if (stk.size() >= 1)
-	{
-		stk.push(std::cos(stk.pop()));
-	}
-	else
-	{
-		cout << "Too many operators" << endl;
-	}
+	stk.size() >= 1 ? stk.push(std::cos(stk.pop())) : exit(-1);
 }
 void RPN::tangent()
 {
-	if (stk.size() >= 1)
-	{
-		stk.push(std::tan(stk.pop()));
-	}
-	else
-	{
-		cout << "Too many operators" << endl;
-	}
+	stk.size() >= 1 ? stk.push(std::tan(stk.pop())) : exit(-1);
 }
 //}
 
@@ -279,5 +241,30 @@ void RPN::doOperation(string token)
 	{
 		cout << "Invalid Operater: Operator Unavailable" << endl;
 		exit(-2);
+	}
+	
+}
+
+void RPN::graph()
+{
+	this->populate();
+	for (int i = 0; i < 100; i++)
+	{
+		int j = this->f(i);
+		this->plane[i][j] = '*';
+	}
+	for (int i = 100; i >= 0; i--)
+	{
+		for (int j = 100; j >= 0; j--)
+			cout << this->plane[i][j];
+		cout << endl;
+	}
+}
+void RPN::populate()
+{
+	for (int i = 0; i <= 100; i++)
+	{
+		for (int j = 0; j <= 100; j++)
+			this->plane[i][j] = '+';
 	}
 }
