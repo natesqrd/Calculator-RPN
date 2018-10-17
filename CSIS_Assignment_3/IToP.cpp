@@ -10,7 +10,7 @@ Description: RPN Calculator using Stacks
 #include <sstream>
 #include <vector>
 #include <iostream>
-#include "Stack.h"
+#include <stack>
 
 using namespace std;
 
@@ -85,7 +85,7 @@ bool IToP::isOperator(string c)
 	return c == "+" || c == "-" || c == "/"
 		|| c == "*" || c == "%" || c == "^" || c == "root"
 		|| c == "(" || c == ")" || c == "sin" 
-		|| c == "cos" || c == "tan";
+		|| c == "cos" || c == "tan" || "sigma";
 }
 
 /*
@@ -121,12 +121,23 @@ string IToP::itop(string expression)
 	{
 		if (isOperand(token))
 		{
-			if (token == "x")
+			if (token == "x" || token == "y")
 			{
-				if (varX != "NULL")
-					postfix += varX + " ";
-				else
-					postfix += token + " ";
+                if (token == "x")
+                {
+                    if (varX != "NULL")
+                        postfix += varX + " ";
+                    else
+                        postfix += token + " ";
+                }
+                else if(token == "y")
+                {
+                    if (varX != "NULL")
+                        postfix += varY + " ";
+                    else
+                        postfix += token + " ";
+                }
+				
 			}
 			else
 				postfix += token + " ";
@@ -135,22 +146,22 @@ string IToP::itop(string expression)
 			stk.push(token);
 		else if (token == ")")
 		{
-			string topToken = stk.pop();
+			string topToken = pop_peek_ITOP();
 			while (topToken != "(")
 			{
 				postfix += topToken + " ";
-				topToken = stk.pop();
+				topToken = pop_peek_ITOP();
 			}
 		}
 		else
 		{
-			while (stk.size() > 0 && prec(stk.peek()) >= prec(token))
-				postfix += stk.pop() + " ";
+			while (stk.size() > 0 && prec(stk.top()) >= prec(token))
+				postfix += pop_peek_ITOP() + " ";
 			stk.push(token);
 		}
 	}
 	while (stk.size() > 0)
-		postfix += stk.pop() + " ";
+		postfix += pop_peek_ITOP() + " ";
 	return postfix;
 }
 
@@ -163,15 +174,15 @@ Outputs: postfix
 */
 string IToP::doPrec(string token, string postfix)
 {
-	if (prec(token) > prec(stk.peek()))
+	if (prec(token) > prec(stk.top()))
 		stk.push(token);
-	else if (prec(token) == prec(stk.peek()))
+	else if (prec(token) == prec(stk.top()))
 	{
-		postfix += stk.pop() + " ";
+		postfix += pop_peek_ITOP() + " ";
 		stk.push(token);
 	}
-	else if (prec(token) < prec(stk.peek()))
-		postfix += stk.pop() + " ";
+	else if (prec(token) < prec(stk.top()))
+		postfix += pop_peek_ITOP() + " ";
 
 	return postfix;
 }

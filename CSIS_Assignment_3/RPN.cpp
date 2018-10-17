@@ -83,7 +83,7 @@ double RPN::operate()
 			doOperation(token);
 	}
 	//one number left, final answer
-	return stk.pop();
+	return pop_peek();
 }
 void RPN::deltaX(double right, double left, int n)
 {
@@ -96,19 +96,30 @@ double RPN::f(double top)
 	ss >> this->varX;
 	return this->operate();
 }
-double RPN::DefIntegrate(double left, double right, int iteration)
+double RPN::g(double top)
+{
+    stringstream ss;
+    ss << top;
+    ss >> this->varY;
+    return this->operate();
+}
+//integ[a,b f(x)dx| = (b-a)/2n [[f(a) + 2{sum[n-1,i=1 f(a+ih)} + f(b)]]
+double RPN::DefIntegrate(double left, double right)
 {
 	if (left == right)
-		return 0;
+		return 0;      //if there is no distance between left and right, there is no area
 	else
 	{
-		double area = 0.0;
-		deltaX(right, left, iteration);
+        int iteration = 10000; //default iteration
+		deltaX(right, left, iteration);//gets delta_x (b-a)/n
+        double area_prime = f(left) + f(right); //gets y_0
+        double area = 0;
 		for (int i = 0; i < iteration; i++)
-		{
-			area += f(left + (i + 0.5) * dX) * dX;
+        {   
+		    area += f((left + i)*dX); //starts with y_0 (area) and y_n+1 (f(x)), iterates through to get next y_n
 		}
-		return abs(area);
+        return (dX / 2)*(area_prime + (2 * area));
+		//return (dX/2)*area;//area is equal to the sum * dx/2 (b-a/2n). First area holds sum, new area is returned
 	}
 }
 /*
@@ -122,14 +133,14 @@ there are no inputs or outputs, only functions to operate on the data in the sta
 //using a hash table helps. Make each token equal to the precidence and mod to go straight to function??
 void RPN::add()
 {
-	stk.size() >= 2 ? stk.push(stk.pop() + stk.pop()) : exit(-1);
+	stk.size() >= 2 ? stk.push(pop_peek() + pop_peek()) : exit(-1);
 }
 void RPN::sub()
 {
 	if (stk.size() >= 2)
 	{
-		this->d = stk.pop();
-		stk.push(stk.pop() - d);
+		this->d = pop_peek();
+		stk.push(pop_peek() - d);
 	}
 	else
 	{
@@ -139,14 +150,14 @@ void RPN::sub()
 }
 void RPN::mult()
 {
-	stk.size() >= 2 ? stk.push(stk.pop() * stk.pop()) : exit(-1);
+	stk.size() >= 2 ? stk.push(pop_peek() * pop_peek()) : exit(-1);
 }
 void RPN::div()
 {
 	if (stk.size() >= 2)
 	{
-		this->d = stk.pop();
-		stk.push(stk.pop() / d);
+		this->d = pop_peek();
+		stk.push(pop_peek() / d);
 	}
 	else
 	{
@@ -159,8 +170,8 @@ void RPN::power()
 
 	if (stk.size() >= 2)
 	{
-		this->d = stk.pop();
-		stk.push(std::pow(stk.pop(), d));
+		this->d = pop_peek();
+		stk.push(std::pow(pop_peek(), d));
 	}
 	else
 	{
@@ -172,8 +183,8 @@ void RPN::root()
 {
 	if (stk.size() >= 2)
 	{
-		this->d = stk.pop();
-		stk.push(std::pow(d, 1/stk.pop()));
+		this->d = pop_peek();
+		stk.push(std::pow(d, 1/pop_peek()));
 	}
 	else
 	{
@@ -185,8 +196,8 @@ void RPN::mod()
 {
 	if (stk.size() >= 2)
 	{
-		this->d = stk.pop();
-		stk.push(std::fmod(stk.pop(), d));
+		this->d = pop_peek();
+		stk.push(std::fmod(pop_peek(), d));
 	}
 	else
 	{
@@ -196,15 +207,15 @@ void RPN::mod()
 }
 void RPN::sine()
 {
-	stk.size() >= 1 ? stk.push(std::sin(stk.pop())) : exit(-1);
+	stk.size() >= 1 ? stk.push(std::sin(pop_peek())) : exit(-1);
 }
 void RPN::cosine()
 {
-	stk.size() >= 1 ? stk.push(std::cos(stk.pop())) : exit(-1);
+	stk.size() >= 1 ? stk.push(std::cos(pop_peek())) : exit(-1);
 }
 void RPN::tangent()
 {
-	stk.size() >= 1 ? stk.push(std::tan(stk.pop())) : exit(-1);
+	stk.size() >= 1 ? stk.push(std::tan(pop_peek())) : exit(-1);
 }
 //}
 
@@ -250,7 +261,7 @@ void RPN::graph()
 	this->populate();
 	for (int i = 0; i < 100; i++)
 	{
-		int j = this->f(i);
+		int j = static_cast<int>(this->f(i));
 		this->plane[i][j] = '*';
 	}
 	for (int i = 100; i >= 0; i--)

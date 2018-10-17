@@ -8,7 +8,7 @@ Description: RPN Calculator using Stacks
 #pragma once
 #define _USE_MATH_DEFINES
 #include "IToP.h"
-#include "Stack.h"
+#include <stack>
 #include <string>
 #include <vector>
 #include <cmath>
@@ -22,10 +22,16 @@ class RPN : public IToP
 private:
 	double dX;
 	string expression;
-	Stack<double> stk;
+	std::stack<double> stk;
 	void deltaX(double a, double b, int n);
 	double d, e;
 	char plane[10][10];
+    double pop_peek()
+    {
+        double d = this->stk.top();
+        this->stk.pop();
+        return d;
+    }
 	
 	void add(); //pops two numbers and pushes the added value
 	void sub(); // pops two numbers and pushes the difference value
@@ -49,8 +55,45 @@ public:
 	double operate(string); //takes string and performs operation defined in private
 	string convert(); // returns the equation as Reverse Polish Notation (RPN)
 	double f(double);
+    double g(double);
+    double F(double x, double y)
+    {
+        std::stringstream ss, aa;
+        ss << x;
+        ss >> this->varX;
+        aa << y;
+        aa >> this->varY;
+        return this->operate();
+    }
 	void printEq() { std::cout << this->expression << " = " << this->operate() << " when x = " << this->getX() << std::endl; }
-	double DefIntegrate(double high_end, double low_end, int iteration);
-	void graph();
+	double DefIntegrate(double high_end, double low_end);//now using trap equation
+
+	double d_dx(double x, double a) 
+    { 
+        if (a = x)
+            a = 0.00000001;
+		return (this->f(x) - this->f(a)) / x - a;
+	}
+    double NewtonRoot(double point)
+    {
+        if(point - (this->f(point) / this->d_dx(0, point) == 0))
+            return point;
+        else
+        {
+            this->NewtonRoot(point);
+            return point;
+        }
+    }
+    void E_method(double iter, double h_end, double x, double y)
+    {
+        while (x < h_end)
+        {
+            y += iter * F(x, y);
+            y /*y_next*/ = y /*y_curr*/ + iter * F(x, y);
+            x += iter;
+            std::cout << x << ", " << y << "\n";
+        }
+    }
+    void graph();
 	void populate();
 };
