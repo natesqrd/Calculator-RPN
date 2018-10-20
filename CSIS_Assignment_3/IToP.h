@@ -11,6 +11,8 @@
 #include <vector>
 #include <string>
 #include <stack>
+#include <queue>
+#include <list>
 
 using std::string;
 using std::vector; // make into a dynamic array
@@ -24,7 +26,7 @@ private:
 	int prec(string x); // returns the precedence of an operator, the higher the number, the higher the precedence
 	string doPrec(string token, string postfix); //returns token with modified precedence determined by prec
 	void resize(string &std); // handles excess space in string
-    string pop_peek_ITOPn()
+    string pop_peek_ITOP()
     {
         string s = this->stk.top();
         this->stk.pop();

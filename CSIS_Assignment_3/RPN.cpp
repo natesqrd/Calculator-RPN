@@ -37,7 +37,8 @@ Outputs: string postfix
 */
 string RPN::convert()
 {
-	return itop(this->expression);
+	this->RPN_expression = itop(this->expression);
+    return RPN_expression;
 }
 
 /*
@@ -49,6 +50,7 @@ Inputs: string expression
 void RPN::changeExpression(string str)
 {
 	this->expression = str;
+    this->convert();
 }
 
 /*
@@ -63,6 +65,13 @@ double RPN::operate(string str)
 	this->expression = str;
 	return this->operate();
 }
+double RPN::operate(double x)
+{
+    stringstream ss;
+    ss << x;
+    ss >> this->varX;
+    return this->operate();
+}
 
 /*
 Function: operate
@@ -72,12 +81,13 @@ Outputs: operated value
 */
 double RPN::operate()
 {
-	string rpn = itop(this->expression);
+    string rpn = RPN_expression;
+    
 	vector<string> tokens = split(rpn);
 	for (string token : tokens)
 	{
 		if (isOperand(token)) //if number, push into stack
-			stk.push(stod(token));
+			this->stk.push(stod(token));
 
 		else //if operator, pop, do operation
 			doOperation(token);
@@ -133,14 +143,14 @@ there are no inputs or outputs, only functions to operate on the data in the sta
 //using a hash table helps. Make each token equal to the precidence and mod to go straight to function??
 void RPN::add()
 {
-	stk.size() >= 2 ? stk.push(pop_peek() + pop_peek()) : exit(-1);
+	this->stk.size() >= 2 ? this->stk.push(pop_peek() + pop_peek()) : exit(-1);
 }
 void RPN::sub()
 {
-	if (stk.size() >= 2)
+	if (this->stk.size() >= 2)
 	{
 		this->d = pop_peek();
-		stk.push(pop_peek() - d);
+		this->stk.push(pop_peek() - d);
 	}
 	else
 	{
@@ -150,14 +160,14 @@ void RPN::sub()
 }
 void RPN::mult()
 {
-	stk.size() >= 2 ? stk.push(pop_peek() * pop_peek()) : exit(-1);
+	this->stk.size() >= 2 ? this->stk.push(pop_peek() * pop_peek()) : exit(-1);
 }
 void RPN::div()
 {
-	if (stk.size() >= 2)
+	if (this->stk.size() >= 2)
 	{
 		this->d = pop_peek();
-		stk.push(pop_peek() / d);
+		this->stk.push(pop_peek() / d);
 	}
 	else
 	{
@@ -168,10 +178,10 @@ void RPN::div()
 void RPN::power()
 {
 
-	if (stk.size() >= 2)
+	if (this->stk.size() >= 2)
 	{
 		this->d = pop_peek();
-		stk.push(std::pow(pop_peek(), d));
+		this->stk.push(std::pow(pop_peek(), d));
 	}
 	else
 	{
@@ -181,10 +191,10 @@ void RPN::power()
 }
 void RPN::root()
 {
-	if (stk.size() >= 2)
+	if (this->stk.size() >= 2)
 	{
 		this->d = pop_peek();
-		stk.push(std::pow(d, 1/pop_peek()));
+		this->stk.push(std::pow(d, 1/pop_peek()));
 	}
 	else
 	{
@@ -194,10 +204,10 @@ void RPN::root()
 }
 void RPN::mod()
 {
-	if (stk.size() >= 2)
+	if (this->stk.size() >= 2)
 	{
 		this->d = pop_peek();
-		stk.push(std::fmod(pop_peek(), d));
+		this->stk.push(std::fmod(pop_peek(), d));
 	}
 	else
 	{
@@ -207,15 +217,15 @@ void RPN::mod()
 }
 void RPN::sine()
 {
-	stk.size() >= 1 ? stk.push(std::sin(pop_peek())) : exit(-1);
+	this->stk.size() >= 1 ? this->stk.push(std::sin(pop_peek())) : exit(-1);
 }
 void RPN::cosine()
 {
-	stk.size() >= 1 ? stk.push(std::cos(pop_peek())) : exit(-1);
+	this->stk.size() >= 1 ? this->stk.push(std::cos(pop_peek())) : exit(-1);
 }
 void RPN::tangent()
 {
-	stk.size() >= 1 ? stk.push(std::tan(pop_peek())) : exit(-1);
+	this->stk.size() >= 1 ? this->stk.push(std::tan(pop_peek())) : exit(-1);
 }
 //}
 

@@ -14,14 +14,15 @@ Description: RPN Calculator using Stacks
 #include <cmath>
 #include <iostream>
 #include <sstream>
-
+#include <queue>
 using std::string;
 
 class RPN : public IToP
 {
 private:
 	double dX;
-	string expression;
+	string expression = "NULL";
+    string RPN_expression = "NULL";
 	std::stack<double> stk;
 	void deltaX(double a, double b, int n);
 	double d, e;
@@ -52,7 +53,9 @@ public:
 	string getX() { return this->varX;  }
 	void changeExpression(string); // changes private string to string
 	double operate(); // takes private string and performs operation defined in private
-	double operate(string); //takes string and performs operation defined in private
+	double operate(string);
+    double operate(double x);
+    double operate(double x, double y);
 	string convert(); // returns the equation as Reverse Polish Notation (RPN)
 	double f(double);
     double g(double);

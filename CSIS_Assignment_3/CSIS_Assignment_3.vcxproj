@@ -149,11 +149,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="DblyLinkedList.h" />
     <ClInclude Include="IToP.h" />
-    <ClInclude Include="Queue.h" />
     <ClInclude Include="RPN.h" />
-    <ClInclude Include="Stack.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="IToP.cpp" />
